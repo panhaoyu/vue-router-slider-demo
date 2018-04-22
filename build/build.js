@@ -10,6 +10,7 @@ const chalk = require('chalk');
 const webpack = require('webpack');
 const config = require('../config');
 const webpackConfig = require('./webpack.prod.conf');
+const cmd = require('child_process').exec;
 
 const spinner = ora('building for production...');
 spinner.start();
@@ -31,6 +32,12 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
       console.log(chalk.red('  Build failed with errors.\n'));
       process.exit(1)
     }
+    cmd('ghp-import -m "Auto Deploy" -p -f -b ghp-pages dist', (error, stdout, stderr) => {
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
+
 
     console.log(chalk.cyan('  Build complete.\n'));
     console.log(chalk.yellow(
